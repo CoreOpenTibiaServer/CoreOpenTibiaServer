@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using COTS.GameServer.Network;
 
 namespace COTS.GameServer {
 
@@ -12,11 +13,27 @@ namespace COTS.GameServer {
             )]
         public string DataDirectoryPath { get; }
 
-        public CommandLineArguments(string dataDirectoryPath) {
-            if (string.IsNullOrEmpty(dataDirectoryPath))
-                DataDirectoryPath = "Data";
-            else
-                DataDirectoryPath = dataDirectoryPath;
+        [Option(
+            longName: nameof(ClientConnectionPort),
+            Required = false,
+            Default = 7171,
+            HelpText = "The port clients will connect to."
+            )]
+        public int ClientConnectionPort { get; }
+
+        public CommandLineArguments(
+            string dataDirectoryPath,
+            int clientConnectionPort
+            ) {
+            DataDirectoryPath = string.IsNullOrEmpty(dataDirectoryPath)
+                ? "Data"
+                : dataDirectoryPath;
+
+            ClientConnectionPort = clientConnectionPort;
+        }
+
+        public ConnectionManager GetClientConnectionManager() {
+            return new ConnectionManager(port: ClientConnectionPort);
         }
     }
 }
