@@ -43,8 +43,6 @@ namespace COTS.Infra.CrossCutting.Security
             return true;
         }
 
-        #region Conversion Needed!
-
         /// <summary>
         /// Based on Output network message
         /// </summary>
@@ -115,7 +113,7 @@ namespace COTS.Infra.CrossCutting.Security
 
             return true;
         }
-        #endregion
+
     }
 
 
@@ -164,7 +162,7 @@ namespace COTS.Infra.CrossCutting.Security
 
     public class NetworkMessage
     {
-        #region Properties
+
         private int _length;
         /// <summary>
         /// Length of the current content
@@ -199,9 +197,7 @@ namespace COTS.Infra.CrossCutting.Security
         /// Maximum buffer size of empty instance
         /// </summary>
         private const int BufferSize = Constants.NetworkMessageSizeMax;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Creates empty ByteStream 
         /// </summary>
@@ -233,9 +229,7 @@ namespace COTS.Infra.CrossCutting.Security
 
             fileStream.Read(_buffer, 0, _length);
         }
-        #endregion
 
-        #region Utility
         /// <summary>
         /// Resets network message's position
         /// </summary>
@@ -268,9 +262,7 @@ namespace COTS.Infra.CrossCutting.Security
             if (_position > _length)
                 _length = _position;
         }
-        #endregion
 
-        #region Get
         /// <summary>
         /// Returns the next byte from the content 
         /// </summary>
@@ -476,9 +468,6 @@ namespace COTS.Infra.CrossCutting.Security
             return DateTime.FromBinary(BitConverter.ToInt64(GetBytes(8), 0));
         }
 
-        #endregion
-
-        #region Add
         /// <summary>
         /// Adds a byte to the content  
         /// </summary>
@@ -726,7 +715,6 @@ namespace COTS.Infra.CrossCutting.Security
             AddBytes(BitConverter.GetBytes(true));
             AddBytes(BitConverter.GetBytes(value.Value.Ticks));
         }
-        #endregion
 
         public bool RsaDecrypt()
         {
@@ -753,13 +741,12 @@ namespace COTS.Infra.CrossCutting.Security
 
     public class OutputMessage : NetworkMessage
     {
-        #region Constants
+
         public const int HeaderLength = 2;
         public const int CryptoLength = 4;
         public const int XteaMultiple = 8;
         public const int MaxBodyLength = Constants.NetworkMessageSizeMax - HeaderLength - CryptoLength - XteaMultiple;
         public const int MaxProtocolBodyLength = MaxBodyLength - 10;
-        #endregion
 
         private int _headerPosition;
         /// <summary>
@@ -808,7 +795,6 @@ namespace COTS.Infra.CrossCutting.Security
             AddHeaderUInt16((ushort)Length);
         }
 
-        #region Add To Header
         protected void AddHeaderBytes(byte[] value)
         {
             if (value.Length > _headerPosition)
@@ -831,7 +817,6 @@ namespace COTS.Infra.CrossCutting.Security
         {
             AddHeaderBytes(BitConverter.GetBytes(value));
         }
-        #endregion
 
         public void Append(NetworkMessage msg)
         {
@@ -849,8 +834,6 @@ namespace COTS.Infra.CrossCutting.Security
         }
     }
 
-
-    #region PacketTypes
     public enum ServerPacketType : byte
     {
         Disconnect = 0x0A,
@@ -1046,7 +1029,5 @@ namespace COTS.Infra.CrossCutting.Security
         MarketAcceptOffer = 0xF8,
         ModalWindowAnswer = 0xF9,
     }
-    #endregion
-
 
 }
