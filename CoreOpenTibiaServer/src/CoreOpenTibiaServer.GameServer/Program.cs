@@ -2,6 +2,7 @@
 using COTS.GameServer.Lua;
 using System;
 using System.Threading.Tasks;
+using COTS.Infra.CrossCutting.Network;
 
 namespace COTS.GameServer {
 
@@ -18,6 +19,12 @@ namespace COTS.GameServer {
             } else {
                 throw new InvalidOperationException("Fo reals? This line should never be reached.");
             }
+
+            var original = "testiculos";
+            var encoded = NetworkMessage.Encode(original);
+            Console.WriteLine(encoded.Length);
+            var decoded = NetworkMessage.Decode(encoded);
+            Console.WriteLine(original == decoded);
 
             Console.ReadLine();
         }
