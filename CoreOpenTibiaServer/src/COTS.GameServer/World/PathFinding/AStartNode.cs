@@ -3,7 +3,7 @@
     public sealed class AStartNode {
         public readonly uint X;
         public readonly uint Y;
-        public float Priority;
+        public int Priority;
         public int QueueIndex;
     }
 }

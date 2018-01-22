@@ -69,7 +69,7 @@ namespace COTS.GameServer.World.PathFinding {
         /// O(log n)
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Enqueue(AStartNode node, float priority) {
+        public void Enqueue(AStartNode node, int priority) {
 #if DEBUG
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
@@ -356,7 +356,7 @@ namespace COTS.GameServer.World.PathFinding {
         /// O(log n)
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void UpdatePriority(AStartNode node, float priority) {
+        public void UpdatePriority(AStartNode node, int priority) {
 #if DEBUG
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
