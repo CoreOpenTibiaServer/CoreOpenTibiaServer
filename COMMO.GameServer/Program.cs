@@ -10,8 +10,8 @@ namespace COMMO.GameServer {
 			var message = new Span<byte>(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7 });
 			var key = new Span<byte>(new byte[] { 1, 2, 3, 4 });
 
-			var crypto = Network.Cryptography.PseudoXTea.Encrypt(message, key);
-			var decrypto = Network.Cryptography.PseudoXTea.Decrypt(crypto, key);
+			var crypto = Network.Cryptography.XTea.Encrypt(message, key);
+			var decrypto = Network.Cryptography.XTea.Decrypt(crypto, key);
 
 			Console.WriteLine(Enumerable.SequenceEqual(message.ToArray(), decrypto.ToArray()));
 

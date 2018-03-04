@@ -2,32 +2,31 @@ using System;
 
 namespace COMMO.Network.Cryptography {
 
-	public static class PseudoXTea {
+	public static class XTea {
 		private const int DefaultOTCRoundCount = 32;
 		private const int SupportedMessageBlockLength = 8;
 		private const int SupportedKeyLength = 4;
 
 		private const uint BakedSum = 0xC6EF3720; //(Delta * Rounds)
 		private const uint Delta = 0x9E3779B9;
-		private const uint Rounds = 32;
 
-		public static Span<byte> Encrypt(ReadOnlySpan<byte> message, ReadOnlySpan<byte> key) {
+		public static Span<byte> Encrypt(ReadOnlySpan<byte> message, ReadOnlySpan<byte> key, int rounds = DefaultOTCRoundCount) {
 			ThrowIfArgumentsAreInvalid(message, key);
 
 			var clone = new Span<byte>(new byte[message.Length]);
 			message.CopyTo(clone);
-			EncryptInplace(clone, key);
+			EncryptInplace(clone, key, rounds);
 			return clone;
 		}
 
-		public static void EncryptInplace(Span<byte> message, ReadOnlySpan<byte> key) {
+		public static void EncryptInplace(Span<byte> message, ReadOnlySpan<byte> key, int rounds = DefaultOTCRoundCount) {
 			ThrowIfArgumentsAreInvalid(message, key);
 
 			var messageAsUIntArray = message.NonPortableCast<byte, uint>();
 			for (int i = 0; i < messageAsUIntArray.Length; i += 2) {
 				var xSum = 0u;
 
-				for (int rounds = 0; rounds < DefaultOTCRoundCount; rounds++) {
+				for (int j = 0; j < rounds; j++) {
 					var temp = messageAsUIntArray[i + 1];
 					messageAsUIntArray[i] += (((temp << 4) ^ (temp >> 5)) + temp) ^ (xSum + key[(int)(xSum & 3)]);
 
@@ -39,23 +38,24 @@ namespace COMMO.Network.Cryptography {
 			}
 		}
 
-		public static Span<byte> Decrypt(ReadOnlySpan<byte> message, ReadOnlySpan<byte> key) {
+		public static Span<byte> Decrypt(ReadOnlySpan<byte> message, ReadOnlySpan<byte> key, int rounds = DefaultOTCRoundCount) {
 			ThrowIfArgumentsAreInvalid(message, key);
 
 			var clone = new Span<byte>(new byte[message.Length]);
 			message.CopyTo(clone);
-			DecryptInplace(clone, key);
+			DecryptInplace(clone, key, rounds);
 			return clone;
 		}
 
-		public static void DecryptInplace(Span<byte> message, ReadOnlySpan<byte> key) {
+		public static void DecryptInplace(Span<byte> message, ReadOnlySpan<byte> key, int rounds = DefaultOTCRoundCount) {
 			ThrowIfArgumentsAreInvalid(message, key);
 
 			var messageAsUIntArray = message.NonPortableCast<byte, uint>();
 			for (int i = 0; i < messageAsUIntArray.Length; i += 2) {
 				var xSum = BakedSum;
 
-				for (int rounds = 0; rounds < DefaultOTCRoundCount; rounds++) {
+				// Running decryption rounds
+				for (int j = 0; j < rounds; j++) {
 					var temp = messageAsUIntArray[i];
 					messageAsUIntArray[i + 1] -= (((temp << 4) ^ (temp >> 5)) + temp) ^ (xSum + key[(int)((xSum >> 11) & 3)]);
 
