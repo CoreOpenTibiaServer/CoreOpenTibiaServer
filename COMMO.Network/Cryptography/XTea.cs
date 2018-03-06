@@ -4,10 +4,10 @@ namespace COMMO.Network.Cryptography {
 
 	public static class XTea {
 		private const int DefaultOTCRoundCount = 32;
-		private const int SupportedMessageBlockLength = 8;
-		private const int SupportedKeyLength = 4;
+		private const int MessageBlockLength = 8;
+		private const int KeySizeInBytes = 16;
 
-		private const uint BakedSum = 0xC6EF3720; //(Delta * Rounds)
+		private const uint BakedSum = 0xC6EF3720;
 		private const uint Delta = 0x9E3779B9;
 
 		public static Span<byte> Encrypt(ReadOnlySpan<byte> message, ReadOnlySpan<byte> key, int rounds = DefaultOTCRoundCount) {
@@ -68,12 +68,12 @@ namespace COMMO.Network.Cryptography {
 		}
 
 		private static void ThrowIfArgumentsAreInvalid(ReadOnlySpan<byte> message, ReadOnlySpan<byte> key) {
-			if (message.Length < SupportedMessageBlockLength)
-				throw new ArgumentException(nameof(message) + $"'s length must be equal to or greater than {SupportedMessageBlockLength}.");
-			if (message.Length % SupportedMessageBlockLength != 0)
-				throw new ArgumentException(nameof(message) + $"'s length must be a multiple of {SupportedMessageBlockLength}.");
-			if (key.Length != SupportedKeyLength)
-				throw new ArgumentOutOfRangeException(nameof(key) + $"'s length must be exactly {SupportedKeyLength}.");
+			if (message.Length < MessageBlockLength)
+				throw new ArgumentException(nameof(message) + $"'s length must be equal to or greater than {MessageBlockLength}.");
+			if (message.Length % MessageBlockLength != 0)
+				throw new ArgumentException(nameof(message) + $"'s length must be a multiple of {MessageBlockLength}.");
+			if (key.Length != KeySizeInBytes)
+				throw new ArgumentOutOfRangeException(nameof(key) + $"'s length must be exactly {KeySizeInBytes}.");
 		}
 	}
 }
