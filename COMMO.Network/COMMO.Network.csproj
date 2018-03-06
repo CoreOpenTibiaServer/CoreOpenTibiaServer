@@ -19,13 +19,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="NetworkMessage.cs" />
-    <Compile Remove="OutputMessage.cs" />
+    <Compile Remove="DeprecatedNetworkMessage.cs" />
+    <Compile Remove="DeprecatedOutputMessage.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="NetworkMessage.cs" />
-    <None Include="OutputMessage.cs" />
+    <None Include="DeprecatedNetworkMessage.cs" />
+    <None Include="DeprecatedOutputMessage.cs" />
   </ItemGroup>
 
   <ItemGroup>
