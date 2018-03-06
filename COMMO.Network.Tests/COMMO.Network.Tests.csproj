@@ -24,6 +24,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="LoginRequestTests.cs" />
+    <Compile Remove="LoginResponseTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="LoginRequestTests.cs" />
+    <None Include="LoginResponseTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.2.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.2.0" />

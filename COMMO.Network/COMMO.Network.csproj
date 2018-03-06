@@ -19,6 +19,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="NetworkMessage.cs" />
+    <Compile Remove="OutputMessage.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="NetworkMessage.cs" />
+    <None Include="OutputMessage.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="System.Memory" Version="4.4.0-preview1-25305-02" />
   </ItemGroup>

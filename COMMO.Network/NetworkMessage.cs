@@ -16,7 +16,6 @@ namespace COMMO.Network
 		public const int NetworkMessagePoolSize = 100;
 		public const int NetworkMessagePoolExpansionSize = 10;
 
-		#region Properties
 		private int _length;
         private int _position;
         private byte[] _buffer;
@@ -55,9 +54,7 @@ namespace COMMO.Network
         /// Maximum buffer size of empty instance
         /// </summary>
         private const int BufferSize = NetworkMessageSizeMax;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Creates empty ByteStream 
         /// </summary>
@@ -146,9 +143,7 @@ namespace COMMO.Network
         public static LoginResponse DecodeLoginResponse(byte[] bytes) =>
             JsonConvert.DeserializeObject<LoginResponse>(Decode(bytes
                 ?? throw new ArgumentNullException(nameof(bytes))));
-        #endregion
 
-        #region Utility
         /// <summary>
         /// Resets network message's position
         /// </summary>
@@ -178,9 +173,7 @@ namespace COMMO.Network
             if (_position > _length)
                 _length = _position;
         }
-        #endregion
 
-        #region Get
         /// <summary>
         /// Returns the next byte from the content 
         /// </summary>
@@ -364,9 +357,7 @@ namespace COMMO.Network
                 return null;
             return DateTime.FromBinary(BitConverter.ToInt64(GetBytes(8), 0));
         }
-        #endregion
 
-        #region Add
         /// <summary>
         /// Adds a byte to the content  
         /// </summary>
@@ -645,6 +636,5 @@ namespace COMMO.Network
 			}*/
 			return false;
 		}
-		#endregion
 	}
 }

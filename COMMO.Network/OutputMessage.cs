@@ -3,14 +3,13 @@ using COMMO.Network.Enums;
 using COMMO.Network.Cryptography;
 
 namespace COMMO.Network {
+
 	public class OutputMessage : NetworkMessage {
-		#region Constants
 		public const int HeaderLength = 2;
 		public const int CryptoLength = 4;
 		public const int XteaMultiple = 8;
 		public const int MaxBodyLength = NetworkMessageSizeMax - HeaderLength - CryptoLength - XteaMultiple;
 		public const int MaxProtocolBodyLength = MaxBodyLength - 10;
-		#endregion
 
 		private int _headerPosition;
 		/// <summary>
@@ -54,7 +53,6 @@ namespace COMMO.Network {
 			AddHeaderUInt16((ushort)Length);
 		}
 
-		#region Add To Header
 		protected void AddHeaderBytes(byte[] value) {
 			if (value.Length > _headerPosition) {
 				Console.WriteLine("OutputMessage AddHeader buffer is full!");
@@ -73,7 +71,6 @@ namespace COMMO.Network {
 		protected void AddHeaderUInt16(ushort value) {
 			AddHeaderBytes(BitConverter.GetBytes(value));
 		}
-		#endregion
 
 		public void Append(NetworkMessage msg) {
 			int msgLen = msg.Length;
@@ -87,9 +84,7 @@ namespace COMMO.Network {
 			Length += count;
 			Position += count;
 		}
-
-		#region Checksum
-
+		
 		public bool CheckAdler32() {
 			// return Checksum.ComputeChecksum(Buffer, 6, Length) == GetAdler32();			
 			return Checksum.Adler32(new Span<byte>(Buffer, 6)) == GetAdler32();
@@ -103,8 +98,6 @@ namespace COMMO.Network {
 		public uint GetAdler32() {
 			return BitConverter.ToUInt32(Buffer, 2);
 		}
-
-		#endregion
 
 		public void InsertPacketLength() {
 			Array.Copy(BitConverter.GetBytes((ushort)(Length - 8)), 0, Buffer, 6, 2);
