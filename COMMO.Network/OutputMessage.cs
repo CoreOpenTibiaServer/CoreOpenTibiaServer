@@ -25,7 +25,7 @@ namespace COMMO.Network {
 				throw new InvalidOperationException();
 
 			_data[Position] = b;
-			Position++;
+			Position += sizeof(byte);
 		}
 
 		public void AddBytes(ReadOnlySpan<byte> bytes) {
@@ -34,7 +34,8 @@ namespace COMMO.Network {
 
 			bytes.CopyTo(new Span<byte>(
 				array: _data,
-				start: Position));
+				start: Position,
+				length: _data.Length - Position));
 			Position += bytes.Length;
 		}
 

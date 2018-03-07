@@ -17,7 +17,7 @@ namespace COMMO.Network.Tests {
 
 		[Fact]
 		public void XTeaDecrypt() {
-			var decryptedMsg = XTea.Decrypt(_encryptedMessage, _key);
+			var decryptedMsg = XTea.Decrypt(_encryptedMessage, _key).ToArray();
 			Assert.Equal(expected: _message, actual: decryptedMsg);
 		}
 
