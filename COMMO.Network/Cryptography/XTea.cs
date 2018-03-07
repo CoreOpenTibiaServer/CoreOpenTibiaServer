@@ -5,12 +5,12 @@ namespace COMMO.Network.Cryptography {
 	public static class XTea {
 		private const int DefaultOTCRoundCount = 32;
 		private const int MessageBlockLength = 8;
-		private const int KeySizeInBytes = 16;
+		private const int KeySizeInBytes = 4;
 
 		private const uint BakedSum = 0xC6EF3720;
 		private const uint Delta = 0x9E3779B9;
 
-		public static Span<byte> Encrypt(ReadOnlySpan<byte> message, ReadOnlySpan<byte> key, int rounds = DefaultOTCRoundCount) {
+		public static Span<byte> Encrypt(ReadOnlySpan<byte> message, ReadOnlySpan<uint> key, int rounds = DefaultOTCRoundCount) {
 			ThrowIfArgumentsAreInvalid(message, key);
 
 			var clone = new Span<byte>(new byte[message.Length]);
@@ -19,7 +19,7 @@ namespace COMMO.Network.Cryptography {
 			return clone;
 		}
 
-		public static void EncryptInplace(Span<byte> message, ReadOnlySpan<byte> key, int rounds = DefaultOTCRoundCount) {
+		public static void EncryptInplace(Span<byte> message, ReadOnlySpan<uint> key, int rounds = DefaultOTCRoundCount) {
 			ThrowIfArgumentsAreInvalid(message, key);
 
 			var messageAsUIntArray = message.NonPortableCast<byte, uint>();
@@ -38,7 +38,7 @@ namespace COMMO.Network.Cryptography {
 			}
 		}
 
-		public static Span<byte> Decrypt(ReadOnlySpan<byte> message, ReadOnlySpan<byte> key, int rounds = DefaultOTCRoundCount) {
+		public static Span<byte> Decrypt(ReadOnlySpan<byte> message, ReadOnlySpan<uint> key, int rounds = DefaultOTCRoundCount) {
 			ThrowIfArgumentsAreInvalid(message, key);
 
 			var clone = new Span<byte>(new byte[message.Length]);
@@ -47,7 +47,7 @@ namespace COMMO.Network.Cryptography {
 			return clone;
 		}
 
-		public static void DecryptInplace(Span<byte> message, ReadOnlySpan<byte> key, int rounds = DefaultOTCRoundCount) {
+		public static void DecryptInplace(Span<byte> message, ReadOnlySpan<uint> key, int rounds = DefaultOTCRoundCount) {
 			ThrowIfArgumentsAreInvalid(message, key);
 
 			var messageAsUIntArray = message.NonPortableCast<byte, uint>();
@@ -67,7 +67,7 @@ namespace COMMO.Network.Cryptography {
 			}
 		}
 
-		private static void ThrowIfArgumentsAreInvalid(ReadOnlySpan<byte> message, ReadOnlySpan<byte> key) {
+		private static void ThrowIfArgumentsAreInvalid(ReadOnlySpan<byte> message, ReadOnlySpan<uint> key) {
 			if (message.Length < MessageBlockLength)
 				throw new ArgumentException(nameof(message) + $"'s length must be equal to or greater than {MessageBlockLength}.");
 			if (message.Length % MessageBlockLength != 0)
