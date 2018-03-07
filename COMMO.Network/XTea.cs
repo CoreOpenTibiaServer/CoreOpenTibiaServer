@@ -1,6 +1,6 @@
 using System;
 
-namespace COMMO.Network.Cryptography {
+namespace COMMO.Network {
 
 	public static class XTea {
 		private const int DefaultOTCRoundCount = 32;

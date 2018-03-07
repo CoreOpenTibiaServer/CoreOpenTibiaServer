@@ -1,6 +1,4 @@
-using System;
 using Xunit;
-using COMMO.Network.Cryptography;
 
 namespace COMMO.Network.Tests {
 
@@ -11,19 +9,24 @@ namespace COMMO.Network.Tests {
 
 		[Fact]
 		public void XTeaEncrypt() {
-			var encryptedMessage = XTea.Encrypt(_message, _key).ToArray();
-			Assert.Equal(expected: _encryptedMessage, actual: encryptedMessage);
+			var encryptedMessage = XTea
+				.Encrypt(_message, _key)
+				.ToArray();
+
+			Assert.Equal(
+				expected: _encryptedMessage,
+				actual: encryptedMessage);
 		}
 
 		[Fact]
 		public void XTeaDecrypt() {
-			var decryptedMsg = XTea.Decrypt(_encryptedMessage, _key).ToArray();
-			Assert.Equal(expected: _message, actual: decryptedMsg);
-		}
+			var decryptedMsg = XTea
+				.Decrypt(_encryptedMessage, _key)
+				.ToArray();
 
-		[Fact]
-		public void TrivialTest() {
-			Assert.True(true);
+			Assert.Equal(
+				expected: _message,
+				actual: decryptedMsg);
 		}
 	}
 }
