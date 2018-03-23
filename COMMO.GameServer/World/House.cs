@@ -6,7 +6,7 @@ namespace COMMO.GameServer.World {
 	public sealed class House {
 		public readonly UInt32 Id;
 		public string HouseName;
-		public Position EntryPosition;
+		public Coordinate EntryPosition;
 
 		public readonly List<Tile> Tiles = new List<Tile>();
 
