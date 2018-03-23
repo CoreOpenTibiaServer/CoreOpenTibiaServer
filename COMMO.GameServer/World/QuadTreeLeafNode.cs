@@ -32,7 +32,7 @@ namespace COMMO.GameServer.World {
             return _floors[z];
         }
 
-        public bool TryGetFloor(byte z, out Floor floor) {
+        public bool TryGetFloor(sbyte z, out Floor floor) {
             if (z > World.WorldHighestLayer)
                 throw new ArgumentOutOfRangeException(nameof(z) + $" must be equal to or less than {World.WorldHighestLayer}");
 

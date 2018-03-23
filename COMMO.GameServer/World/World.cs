@@ -14,26 +14,22 @@ namespace COMMO.GameServer.World {
 			throw new NotImplementedException();
 		}
 
-		public bool TryGetTile(ushort x, ushort y, byte z, out Tile tile) {
-			if (z > WorldHighestLayer)
-				throw new ArgumentOutOfRangeException(nameof(z) + $" must be equal to or less than {WorldHighestLayer}");
-
-			if (!RootQuadTreeNode.TryGetLeaf(x, y, out var leaf)) {
+		public bool TryGetTile(in Coordinate coordinate, out Tile tile) {
+			if (!RootQuadTreeNode.TryGetLeaf(coordinate.X, coordinate.Y, out var leaf)) {
 				tile = null;
 				return false;
 			}
-			if (!leaf.TryGetFloor(z, out var floor)) {
+			if (!leaf.TryGetFloor(coordinate.Z, out var floor)) {
 				tile = null;
 				return false;
 			}
 
-			tile = floor.Tiles.Get(x, y);
+			tile = floor.Tiles.Get(coordinate.X, coordinate.Y);
 			return tile != null;
 		}
 
+
 		public void CreateOrUpdateTile(ushort x, ushort y, byte z, Tile newTile) {
-			if (z > WorldHighestLayer)
-				throw new ArgumentOutOfRangeException(nameof(z) + $" must be equal to or less than {WorldHighestLayer}");
 			if (newTile == null)
 				throw new ArgumentNullException(nameof(newTile));
 
