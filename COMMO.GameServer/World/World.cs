@@ -3,36 +3,19 @@ using System;
 namespace COMMO.GameServer.World {
 
 	public sealed class World {
-		public const byte WorldHighestLayer = 15;
+		/// <summary>
+		/// Since we use a 8 bits to represent the z value of a <see cref="Coordinate"/>,
+		/// our World can have 256 floors.
+		/// </summary>
+		public const int FloorCount = 256;
 
-		public readonly QuadTreeNode RootQuadTreeNode;
+		private readonly QuadTree _quadTree;
 
 		public void AddTile(Tile tile) {
 			if (tile == null)
 				throw new ArgumentNullException(nameof(tile));
 
 			throw new NotImplementedException();
-		}
-
-		public bool TryGetTile(in Coordinate coordinate, out Tile tile) {
-			if (!RootQuadTreeNode.TryGetLeaf(coordinate.X, coordinate.Y, out var leaf)) {
-				tile = null;
-				return false;
-			}
-			if (!leaf.TryGetFloor(coordinate.Z, out var floor)) {
-				tile = null;
-				return false;
-			}
-
-			tile = floor.Tiles.Get(coordinate.X, coordinate.Y);
-			return tile != null;
-		}
-
-
-		public void CreateOrUpdateTile(ushort x, ushort y, byte z, Tile newTile) {
-			if (newTile == null)
-				throw new ArgumentNullException(nameof(newTile));
-
 			//var leafNode = RootQuadTreeNode.CreateLeafOrGetReference(x, y, WorldHighestLayer);
 
 			//UpdateNeighbors(x, y, leafNode);
@@ -64,33 +47,18 @@ namespace COMMO.GameServer.World {
 			//    oldTile.AddThing(newTile.GetGround());
 		}
 
-		private void UpdateNeighbors(ushort leafsXCoordinate, ushort leafsYCoordinate, QuadTreeLeafNode leafNode) {
-			if (RootQuadTreeNode.TryGetLeaf(
-							x: leafsXCoordinate,
-							y: (ushort)(leafsYCoordinate - Floor.FloorSize),
-							leaf: out var northLeaf)) {
-				northLeaf.SouthNeighbor = leafNode;
+		public bool TryGetTile(in Coordinate coordinate, out Tile tile) {
+			if (!_quadTree.TryGetLeaf(coordinate.X, coordinate.Y, out var leaf)) {
+				tile = null;
+				return false;
+			}
+			if (!leaf.TryGetFloor(coordinate.Z, out var floor)) {
+				tile = null;
+				return false;
 			}
 
-			if (RootQuadTreeNode.TryGetLeaf(
-				x: (ushort)(leafsXCoordinate - Floor.FloorSize),
-				y: leafsYCoordinate,
-				leaf: out var westLeaf)) {
-			}
-
-			if (RootQuadTreeNode.TryGetLeaf(
-				x: leafsXCoordinate,
-				y: (ushort)(leafsYCoordinate + Floor.FloorSize),
-				leaf: out var southLeaf)) {
-				leafNode.SouthNeighbor = southLeaf;
-			}
-
-			if (RootQuadTreeNode.TryGetLeaf(
-				x: (ushort)(leafsXCoordinate + Floor.FloorSize),
-				y: leafsYCoordinate,
-				leaf: out var eastLeaf)) {
-				leafNode.EastNeighbor = eastLeaf;
-			}
+			tile = floor.Tiles.Get(coordinate.X, coordinate.Y);
+			return tile != null;
 		}
 	}
 }
