@@ -63,7 +63,7 @@ namespace COMMO.GameServer {
 			return new Coordinate(
 				x: x,
 				y: -y,
-				z: (sbyte)(z - TFSGroundFloorZCoordinate));
+				z: (sbyte)-(z - TFSGroundFloorZCoordinate));
 		}
 
 		/// <summary>
