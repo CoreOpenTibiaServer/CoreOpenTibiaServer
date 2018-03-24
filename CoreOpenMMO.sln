@@ -10,7 +10,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COMMO.GameServer", "COMMO.G
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COMMO", "COMMO\COMMO.csproj", "{EC711719-435E-4B7F-B33D-E65C9CE760E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMMO.Network.Tests", "COMMO.Network.Tests\COMMO.Network.Tests.csproj", "{6D1543C5-6859-47FC-9438-F76707BF7395}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COMMO.Network.Tests", "COMMO.Network.Tests\COMMO.Network.Tests.csproj", "{6D1543C5-6859-47FC-9438-F76707BF7395}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COMMO.GameServer.Tests", "COMMO.GameServer.Tests\COMMO.GameServer.Tests.csproj", "{2DEB15BD-BEE1-43D8-8D39-10FF8A0EE7A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,10 @@ Global
 		{6D1543C5-6859-47FC-9438-F76707BF7395}.Debug|x64.Build.0 = Debug|x64
 		{6D1543C5-6859-47FC-9438-F76707BF7395}.Release|x64.ActiveCfg = Debug|x64
 		{6D1543C5-6859-47FC-9438-F76707BF7395}.Release|x64.Build.0 = Debug|x64
+		{2DEB15BD-BEE1-43D8-8D39-10FF8A0EE7A7}.Debug|x64.ActiveCfg = Debug|x64
+		{2DEB15BD-BEE1-43D8-8D39-10FF8A0EE7A7}.Debug|x64.Build.0 = Debug|x64
+		{2DEB15BD-BEE1-43D8-8D39-10FF8A0EE7A7}.Release|x64.ActiveCfg = Debug|x64
+		{2DEB15BD-BEE1-43D8-8D39-10FF8A0EE7A7}.Release|x64.Build.0 = Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

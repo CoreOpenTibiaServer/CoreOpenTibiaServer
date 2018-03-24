@@ -4,32 +4,28 @@ using COMMO.GameServer.Items;
 
 namespace COMMO.GameServer.World {
 
-    public class Tile {
-        public readonly ushort X;
-        public readonly ushort Y;
-        public readonly byte Z;
+	/// <summary>
+	/// This class represents a tile in the world.
+	/// It's position is described using 2 ushort and a byte because
+	/// the it's a relative position within a "floor"
+	/// </summary>
+	public sealed class Tile {
+		public readonly Coordinate Position;
+		public readonly bool BelongsToHouse;
 
-        public readonly List<Item> Items = new List<Item>();
-        public readonly List<PlayerCharacter> PlayerCharacters = new List<PlayerCharacter>();
+		public readonly List<Item> Items = new List<Item>();
+		public readonly List<PlayerCharacter> PlayerCharacters = new List<PlayerCharacter>();
 
-        public TileFlags Flags;
+		public readonly TileFlags Flags;
 
-        public Tile(ushort x, ushort y, byte z) {
-			X = x;
-			Y = y;
-			Z = z;
-        }
+		public Tile(Coordinate position, TileFlags flags, bool belongsToHouse, List<Item> items) {
+			if (items == null)
+				throw new ArgumentNullException(nameof(items));
 
-        public void AddInternalThing(Item item) {
-            throw new NotImplementedException();
-        }
-
-        public void AddThing(object p) {
-            throw new NotImplementedException();
-        }
-
-        public object GetGround() {
-            throw new NotImplementedException();
-        }
-    }
+			Position = position;
+			Flags = flags;
+			BelongsToHouse = belongsToHouse;
+			Items = items;
+		}
+	}
 }

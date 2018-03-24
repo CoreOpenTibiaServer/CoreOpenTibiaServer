@@ -2,92 +2,63 @@ using System;
 
 namespace COMMO.GameServer.World {
 
-    public sealed class World {
-        public const byte WorldHighestLayer = 15;
+	public sealed class World {
+		/// <summary>
+		/// Since we use a 8 bits to represent the z value of a <see cref="Coordinate"/>,
+		/// our World can have 256 floors.
+		/// </summary>
+		public const int FloorCount = 256;
 
-        public readonly QuadTreeNode RootQuadTreeNode;
+		private readonly QuadTree _quadTree;
 
-        public bool TryGetTile(ushort x, ushort y, byte z, out Tile tile) {
-            if (z > WorldHighestLayer)
-                throw new ArgumentOutOfRangeException(nameof(z) + $" must be equal to or less than {WorldHighestLayer}");
+		public void AddTile(Tile tile) {
+			if (tile == null)
+				throw new ArgumentNullException(nameof(tile));
 
-            if (!RootQuadTreeNode.TryGetLeaf(x, y, out var leaf)) {
-                tile = null;
-                return false;
-            }
-            if (!leaf.TryGetFloor(z, out var floor)) {
-                tile = null;
-                return false;
-            }
+			throw new NotImplementedException();
+			//var leafNode = RootQuadTreeNode.CreateLeafOrGetReference(x, y, WorldHighestLayer);
 
-            tile = floor.Tiles.Get(x, y);
-            return tile != null;
-        }
+			//UpdateNeighbors(x, y, leafNode);
 
-        public void CreateOrUpdateTile(ushort x, ushort y, byte z, Tile newTile) {
-            if (z > WorldHighestLayer)
-                throw new ArgumentOutOfRangeException(nameof(z) + $" must be equal to or less than {WorldHighestLayer}");
-            if (newTile == null)
-                throw new ArgumentNullException(nameof(newTile));
+			//// Updating floor data
+			//var floor = leafNode.CreateFloorOrGetReference(z);
 
-            var leafNode = RootQuadTreeNode.CreateLeafOrGetReference(x, y, WorldHighestLayer);
-            
-            UpdateNeighbors(x, y, leafNode);
+			//ushort xOffset = (ushort)(x & Floor.FloorMask);
+			//ushort yOffset = (ushort)(y & Floor.FloorMask);
 
-            // Updating floor data
-            var floor = leafNode.CreateFloorOrGetReference(z);
+			//// If there is not tile in the given coordinates,
+			//// just set it to be the parameter of this method
+			//var oldTile = floor.Tiles.Get(xOffset, yOffset);
+			//if (oldTile == null) {
+			//    floor.Tiles.Set(x, y, newTile);
+			//    return;
+			//}
 
-            ushort xOffset = (ushort)(x & Floor.FloorMask);
-            ushort yOffset = (ushort)(y & Floor.FloorMask);
+			//// If there is already a tile in the given coordinates,
+			//// we'll update it's items
+			//var newItems = newTile.Items;
+			//var newItemCount = newTile.Items.Count;
+			//for (int i = 0; i < newItemCount; i++) {
+			//    oldTile.AddThing(newItems[i]);
+			//}
 
-            // If there is not tile in the given coordinates,
-            // just set it to be the parameter of this method
-            var oldTile = floor.Tiles.Get(xOffset, yOffset);
-            if (oldTile == null) {
-                floor.Tiles.Set(x, y, newTile);
-                return;
-            }
+			//// No idea what a "item.GetGround" is supposed to be
+			//if (newTile.GetGround() != null)
+			//    oldTile.AddThing(newTile.GetGround());
+		}
 
-            // If there is already a tile in the given coordinates,
-            // we'll update it's items
-            var newItems = newTile.Items;
-            var newItemCount = newTile.Items.Count;
-            for (int i = 0; i < newItemCount; i++) {
-                oldTile.AddThing(newItems[i]);
-            }
+		public bool TryGetTile(in Coordinate coordinate, out Tile tile) {
+			if (!_quadTree.TryGetLeaf(coordinate.X, coordinate.Y, out var leaf)) {
+				tile = null;
+				return false;
+			}
+			if (!leaf.TryGetFloor(coordinate.Z, out var floor)) {
+				tile = null;
+				return false;
+			}
 
-            // No idea what a "item.GetGround" is supposed to be
-            if (newTile.GetGround() != null)
-                oldTile.AddThing(newTile.GetGround());
-        }
-
-        private void UpdateNeighbors(ushort leafsXCoordinate, ushort leafsYCoordinate, QuadTreeLeafNode leafNode) {
-            if (RootQuadTreeNode.TryGetLeaf(
-                            x: leafsXCoordinate,
-                            y: (ushort)(leafsYCoordinate - Floor.FloorSize),
-                            leaf: out var northLeaf)) {
-                northLeaf.SouthNeighbor = leafNode;
-            }
-
-            if (RootQuadTreeNode.TryGetLeaf(
-                x: (ushort)(leafsXCoordinate - Floor.FloorSize),
-                y: leafsYCoordinate,
-                leaf: out var westLeaf)) {
-            }
-
-            if (RootQuadTreeNode.TryGetLeaf(
-                x: leafsXCoordinate,
-                y: (ushort)(leafsYCoordinate + Floor.FloorSize),
-                leaf: out var southLeaf)) {
-                leafNode.SouthNeighbor = southLeaf;
-            }
-
-            if (RootQuadTreeNode.TryGetLeaf(
-                x: (ushort)(leafsXCoordinate + Floor.FloorSize),
-                y: leafsYCoordinate,
-                leaf: out var eastLeaf)) {
-                leafNode.EastNeighbor = eastLeaf;
-            }
-        }
-    }
+			tile = floor.Tiles.Get(coordinate.X, coordinate.Y);
+			return tile != null;
+		}
+	}
 }

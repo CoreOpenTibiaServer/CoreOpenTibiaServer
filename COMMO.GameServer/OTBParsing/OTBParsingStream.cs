@@ -22,7 +22,7 @@ namespace COMMO.GameServer.OTBParsing {
 		public byte ReadByte() {
 			var value = UnderlayingStream.ReadByte();
 
-			if ((MarkupByte)value != MarkupByte.Escape)
+			if ((OTBMarkupByte)value != OTBMarkupByte.Escape)
 				return value;
 			else
 				return UnderlayingStream.ReadByte();
