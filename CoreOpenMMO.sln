@@ -25,8 +25,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COMMO.Scheduling", "src\COM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COMMO.Scheduling.Tests", "src\COMMO.Scheduling.Tests\COMMO.Scheduling.Tests.csproj", "{F246DBC2-0838-4654-972C-8AA338188550}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COMMO.TestUtils", "src\COMMO.TestUtils\COMMO.TestUtils.csproj", "{B062CD6A-6C71-41E5-A9BE-CC34DAB889F3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COMMO.Scheduling.Contracts", "src\COMMO.Scheduling.Contracts\COMMO.Scheduling.Contracts.csproj", "{D9364390-7106-477F-A775-146B9013D613}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COMMO.Server.Parsing", "src\COMMO.Server.Parsing\COMMO.Server.Parsing.csproj", "{96F706FE-5077-47FA-89EE-423B8E99F173}"
@@ -81,10 +79,6 @@ Global
 		{F246DBC2-0838-4654-972C-8AA338188550}.Debug|x64.Build.0 = Debug|x64
 		{F246DBC2-0838-4654-972C-8AA338188550}.Release|x64.ActiveCfg = Release|x64
 		{F246DBC2-0838-4654-972C-8AA338188550}.Release|x64.Build.0 = Release|x64
-		{B062CD6A-6C71-41E5-A9BE-CC34DAB889F3}.Debug|x64.ActiveCfg = Debug|x64
-		{B062CD6A-6C71-41E5-A9BE-CC34DAB889F3}.Debug|x64.Build.0 = Debug|x64
-		{B062CD6A-6C71-41E5-A9BE-CC34DAB889F3}.Release|x64.ActiveCfg = Release|x64
-		{B062CD6A-6C71-41E5-A9BE-CC34DAB889F3}.Release|x64.Build.0 = Release|x64
 		{D9364390-7106-477F-A775-146B9013D613}.Debug|x64.ActiveCfg = Debug|x64
 		{D9364390-7106-477F-A775-146B9013D613}.Debug|x64.Build.0 = Debug|x64
 		{D9364390-7106-477F-A775-146B9013D613}.Release|x64.ActiveCfg = Release|x64
