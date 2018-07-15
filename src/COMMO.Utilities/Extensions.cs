@@ -44,14 +44,5 @@ namespace COMMO.Utilities {
 			return (byte)value;
 		}
 
-		/// <summary>
-		/// Converts a integer to a hex string
-		/// </summary>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		public static string ToHexString(this int value) {
-			var temp = BitConverter.GetBytes(value);
-			return temp.ToHexString();
-		}
 	}
 }
