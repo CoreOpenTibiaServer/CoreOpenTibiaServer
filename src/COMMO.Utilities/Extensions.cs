@@ -23,14 +23,6 @@ namespace COMMO.Utilities {
 		}
 
 
-		/// <summary>
-		/// Converts a char to a byte
-		/// </summary>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		public static byte ToByte(this char value) {
-			return (byte)value;
-		}
 
 	}
 }
