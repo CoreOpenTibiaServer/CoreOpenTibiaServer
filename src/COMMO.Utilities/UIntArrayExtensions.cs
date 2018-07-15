@@ -1,16 +1,7 @@
-// <copyright file="Extensions.cs" company="2Dudes">
-// Copyright (c) 2018 2Dudes. All rights reserved.
-// Licensed under the MIT license.
-// See LICENSE file in the project root for full license information.
-// </copyright>
-
-
 namespace COMMO.Utilities {
 	using System;
-	using System.Collections.Generic;
-	using System.Text;
 
-	public static class Extensions {
+	public static class UIntArrayExtensions {
 
 		public static byte[] ToByteArray(this uint[] unsignedIntegers) {
 			var temp = new byte[unsignedIntegers.Length * sizeof(uint)];
@@ -21,8 +12,5 @@ namespace COMMO.Utilities {
 
 			return temp;
 		}
-
-
-
 	}
 }
