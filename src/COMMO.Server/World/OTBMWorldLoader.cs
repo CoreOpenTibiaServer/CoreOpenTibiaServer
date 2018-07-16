@@ -58,10 +58,10 @@ namespace COMMO.Server.World {
 
 			// TODO: use decent loggin methods
 			Console.WriteLine($"OTBM header version: {headerVersion}");
-			Console.WriteLine($"World width: {parsingStream.ReadUInt16()}");
-			Console.WriteLine($"World height: {parsingStream.ReadUInt16()}");
-			Console.WriteLine($"Item encoding major version: {parsingStream.ReadUInt32()}");
-			Console.WriteLine($"Item encoding minor version: {parsingStream.ReadUInt32()}");
+			Console.WriteLine($"World width: {worldWidth}");
+			Console.WriteLine($"World height: {worldHeight}");
+			Console.WriteLine($"Item encoding major version: {itemEncodingMajorVersion}");
+			Console.WriteLine($"Item encoding minor version: {itemEncodingMinorVersion}");
 		}
 	}
 }
