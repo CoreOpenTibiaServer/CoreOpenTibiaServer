@@ -1,6 +1,8 @@
 namespace COMMO.Server.World {
 	using COMMO.OTB;
 	using COMMO.Server.Items;
+	using COMMO.Server.Map;
+	using COMMO.Utilities;
 	using System;
 	using System.Collections.Generic;
 	using Tile = COMMO.Server.Map.Tile;
@@ -176,6 +178,7 @@ namespace COMMO.Server.World {
 				var attribute = (OTBMWorldNodeAttribute)stream.ReadByte();
 
 				switch (attribute) {
+
 					case OTBMWorldNodeAttribute.TileFlags:
 					var newFlags = (OTBMTileFlags)stream.ReadUInt32();
 					tileFlags = UpdateTileFlags(tileFlags, newFlags);
@@ -186,21 +189,18 @@ namespace COMMO.Server.World {
 					break;
 
 					default:
-					throw new Exception("TFS just threw a exception here, so shall we.");
+					throw new Exception("TFS just threw a exception here, so shall we... Reason: unknown tile attribute.");
 				}
 
 				throw new NotImplementedException();
-			}
-
-			// Parsing tile's items stored as child
-			foreach (var itemNode in tileNode.Children) {
-#warning Not implemented -- Halp Ratazana
 			}
 
 			var tile = new Tile(x: xOffset,
 				y: yOffset,
 				z: tilesAreaStartPosition.Z);
 
+			foreach (var itemNode in tileNode.Children)
+				ParseTilesItemNodes(itemNode, tile);
 
 			// Legacy code
 			// Finally, we collected all the data and create the tile,
@@ -213,6 +213,22 @@ namespace COMMO.Server.World {
 			// house?.AddTile(tile);
 
 			world.AddTile(tile);
+		}
+
+		private static void ParseTilesItemNodes(OTBNode itemNode, Tile tile) {
+			if (itemNode == null)
+				throw new ArgumentNullException(nameof(itemNode));
+			if (tile == null)
+				throw new ArgumentNullException(nameof(tile));
+			if (itemNode.Type != OTBNodeType.Item)
+				throw new InvalidOperationException();
+
+			var stream = new OTBParsingStream(itemNode.Data);
+
+			var itemId = stream.ReadUInt16();
+			switch (itemId) {
+
+			}
 		}
 
 		private static TileFlags UpdateTileFlags(TileFlags oldFlags, OTBMTileFlags newFlags) {
