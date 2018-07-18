@@ -1,4 +1,5 @@
 namespace COMMO.Server.World {
+	using System;
 	using COMMO.Server.Data.Interfaces;
 	using COMMO.Server.Map;
 
@@ -8,6 +9,10 @@ namespace COMMO.Server.World {
 
 		public ITile[,,] Load(int fromSectorX, int toSectorX, int fromSectorY, int toSectorY, byte fromSectorZ, byte toSectorZ) {
 			throw new System.NotImplementedException();
+		}
+
+		internal void AddTile(Tile tile) {
+			throw new NotImplementedException();
 		}
 	}
 }

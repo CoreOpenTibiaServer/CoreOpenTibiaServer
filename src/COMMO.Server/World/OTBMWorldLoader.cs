@@ -1,6 +1,9 @@
 namespace COMMO.Server.World {
 	using COMMO.OTB;
+	using COMMO.Server.Items;
 	using System;
+	using System.Collections.Generic;
+	using Tile = COMMO.Server.Map.Tile;
 
 	/// <summary>
 	/// This class contains the methods necessary to load a .otbm file.
@@ -156,9 +159,78 @@ namespace COMMO.Server.World {
 				xOffset: xOffset,
 				yOffset: yOffset);
 
-			throw new NotImplementedException();
+			// Currently there's no support for houses
+			// Checking whether the tile belongs to a house
+			// House house = null;
+			if (tileNode.Type == OTBNodeType.HouseTile) {
+				var houseId = stream.ReadUInt32();
+				//house = HouseManager.Instance.CreateHouseOrGetReference(houseId);
+			}
+
+			// Parsing the tile attributes
+			var tileFlags = TileFlags.None;
+			var tilesItems = new List<Item>();
+
+			while (!stream.IsOver) {
+
+				var attribute = (OTBMWorldNodeAttribute)stream.ReadByte();
+
+				switch (attribute) {
+					case OTBMWorldNodeAttribute.TileFlags:
+					var newFlags = (OTBMTileFlags)stream.ReadUInt32();
+					tileFlags = UpdateTileFlags(tileFlags, newFlags);
+					break;
+
+					case OTBMWorldNodeAttribute.Item:
+#warning Not implemented -- Halp Ratazana
+					break;
+
+					default:
+					throw new Exception("TFS just threw a exception here, so shall we.");
+				}
+
+				throw new NotImplementedException();
+			}
+
+			// Parsing tile's items stored as child
+			foreach (var itemNode in tileNode.Children) {
+#warning Not implemented -- Halp Ratazana
+			}
+
+			var tile = new Tile(x: xOffset,
+				y: yOffset,
+				z: tilesAreaStartPosition.Z);
+
+
+			// Legacy code
+			// Finally, we collected all the data and create the tile,
+			// adding it to a house, if necessary
+			//var tile = new Tile(
+			//	position: tilePosition,
+			//	flags: tileFlags,
+			//	belongsToHouse: house != null,
+			//	items: tilesItems);
+			// house?.AddTile(tile);
+
+			world.AddTile(tile);
 		}
-		
+
+		private static TileFlags UpdateTileFlags(TileFlags oldFlags, OTBMTileFlags newFlags) {
+			if ((newFlags & OTBMTileFlags.NoLogout) != 0)
+				oldFlags |= TileFlags.NoLogout;
+
+			// I think we should throw if a tile contains contradictory flags, instead of just
+			// ignoring them like tfs does...
+			if ((newFlags & OTBMTileFlags.ProtectionZone) != 0)
+				oldFlags |= TileFlags.ProtectionZone;
+			else if ((newFlags & OTBMTileFlags.NoPvpZone) != 0)
+				oldFlags |= TileFlags.NoPvpZone;
+			else if ((newFlags & OTBMTileFlags.PvpZone) != 0)
+				oldFlags |= TileFlags.PvpZone;
+
+			return oldFlags;
+		}
+
 		/// <summary>
 		/// Updates the <paramref name="world"/> with the data contained
 		/// in <paramref name="tileNode"/>.
@@ -166,7 +238,7 @@ namespace COMMO.Server.World {
 		private static void ParseTownCollectionNode(OTBNode child, World world) {
 			throw new NotImplementedException();
 		}
-		
+
 		/// <summary>
 		/// Updates the <paramref name="world"/> with the data contained
 		/// in <paramref name="tileNode"/>.
