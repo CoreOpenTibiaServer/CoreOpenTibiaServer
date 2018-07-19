@@ -173,110 +173,63 @@ namespace COMMO.Server.World {
 				//house = HouseManager.Instance.CreateHouseOrGetReference(houseId);
 			}
 
-			// Parsing the tile attributes
-			var tileFlags = TileFlags.None;
-			var tilesItems = new List<Item>();
-
-			while (!stream.IsOver) {
-
-				var attribute = (OTBMWorldNodeAttribute)stream.ReadByte();
-
-				switch (attribute) {
-
-					case OTBMWorldNodeAttribute.TileFlags:
-					var newFlags = (OTBMTileFlags)stream.ReadUInt32();
-					tileFlags = UpdateTileFlags(tileFlags, newFlags);
-					break;
-
-					case OTBMWorldNodeAttribute.Item:
-#warning Not implemented -- Halp Ratazana
-					break;
-
-					default:
-					throw new Exception("TFS just threw a exception here, so shall we... Reason: unknown tile attribute.");
-				}
-
-				throw new NotImplementedException();
-			}
-
+			// We create the tile early and mutate it along the method
 			var tile = new Tile(x: xOffset,
 				y: yOffset,
 				z: tilesAreaStartPosition.Z);
 
-			foreach (var itemNode in tileNode.Children)
-				ParseTilesItemNodes(itemNode, tile);
+			// Parsing the tile attributes
+			var tileFlags = TileFlags.None;
+			var tilesItems = new List<Item>();
 
-			// Legacy code
-			// Finally, we collected all the data and create the tile,
-			// adding it to a house, if necessary
-			//var tile = new Tile(
-			//	position: tilePosition,
-			//	flags: tileFlags,
-			//	belongsToHouse: house != null,
-			//	items: tilesItems);
-			// house?.AddTile(tile);
+
+			var tileNodeAttribute = (OTBMWorldNodeAttribute)stream.ReadByte();
+			switch (tileNodeAttribute) {
+
+				case OTBMWorldNodeAttribute.TileFlags:
+				var newFlags = (OTBMTileFlags)stream.ReadUInt32();
+				tileFlags = UpdateTileFlags(tileFlags, newFlags);
+				break;
+
+				case OTBMWorldNodeAttribute.Item:
+				ParseTilesItemNode(tileNode);
+
+
+				//if (isHouseTile && item->isMoveable()) {
+				//	std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID() << ", in house: " << house->getId() << ", at position [x: " << x << ", y: " << y << ", z: " << z << "]." << std::endl;
+				//	delete item;
+				//} else {
+				//	if (item->getItemCount() <= 0) {
+				//		item->setItemCount(1);
+				//	}
+
+				//	if (tile) {
+				//		tile->internalAddThing(item);
+				//		item->startDecaying();
+				//		item->setLoadedFromMap(true);
+				//	} else if (item->isGroundTile()) {
+				//		delete ground_item;
+				//		ground_item = item;
+				//	} else {
+				//		tile = createTile(ground_item, item, x, y, z);
+				//		tile->internalAddThing(item);
+				//		item->startDecaying();
+				//		item->setLoadedFromMap(true);
+				//	}
+				//}
+
+				break;
+
+				default:
+				throw new Exception("TFS just threw a exception here, so shall we... Reason: unknown tile attribute.");
+			}
+
+			foreach (var itemNode in tileNode.Children)
+				ParseTilesItemNode(itemNode);
 
 			world.AddTile(tile);
 		}
 
-		private static void ParseTilesItemNodes(OTBNode itemNode, Tile tile) {
-			if (itemNode == null)
-				throw new ArgumentNullException(nameof(itemNode));
-			if (tile == null)
-				throw new ArgumentNullException(nameof(tile));
-			if (itemNode.Type != OTBNodeType.Item)
-				throw new InvalidOperationException();
-
-			var stream = new OTBParsingStream(itemNode.Data);
-
-			var originalItemId = stream.ReadUInt16();
-			var newItemId = originalItemId;
-
-			switch (originalItemId) {
-				case (UInt16)OTBMWorldItemId.FireFieldPvpLarge:
-				newItemId = (UInt16)OTBMWorldItemId.FireFieldPersistentLarge;
-				break;
-
-				case (UInt16)OTBMWorldItemId.FireFieldPvpMedium:
-				newItemId = (UInt16)OTBMWorldItemId.FireFieldPersistentMedium;
-				break;
-
-				case (UInt16)OTBMWorldItemId.FireFieldPvpSmall:
-				newItemId = (UInt16)OTBMWorldItemId.FireFieldPersistentSmall;
-				break;
-
-				case (UInt16)OTBMWorldItemId.EnergyFieldPvp:
-				newItemId = (UInt16)OTBMWorldItemId.EnergyFieldPersistent;
-				break;
-
-				case (UInt16)OTBMWorldItemId.PoisonFieldPvp:
-				newItemId = (UInt16)OTBMWorldItemId.PoisonFieldPersistent;
-				break;
-
-				case (UInt16)OTBMWorldItemId.MagicWall:
-				newItemId = (UInt16)OTBMWorldItemId.MagicWallPersistent;
-				break;
-
-				case (UInt16)OTBMWorldItemId.WildGrowth:
-				newItemId = (UInt16)OTBMWorldItemId.WildGrowthPersistent;
-				break;
-
-				default:
-				break;
-			}
-
-			if (newItemId != originalItemId)
-				_logger.Warn($"Converted {(OTBMWorldItemId)originalItemId} to {(OTBMWorldItemId)newItemId}.");
-
-
-			var item = ItemFactory.Create(newItemId);
-			if (item == null) 
-				_logger.Warn($"{nameof(ItemFactory)} was unable to create a item with id: {newItemId}.");
-			
-
-			var attributeType = (OTBMWorldItemAttribute)stream.ReadByte();
-			throw new NotImplementedException();
-		}
 
 		private static TileFlags UpdateTileFlags(TileFlags oldFlags, OTBMTileFlags newFlags) {
 			if ((newFlags & OTBMTileFlags.NoLogout) != 0)

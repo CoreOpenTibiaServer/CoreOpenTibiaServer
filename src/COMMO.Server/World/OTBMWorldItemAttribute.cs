@@ -5,13 +5,14 @@ namespace COMMO.Server.World {
 	/// Used to parse OTBM worlds.
 	/// </summary>
 	public enum OTBMWorldItemAttribute : byte {
-		Description = 1,         // //ATTR_DESCRIPTION = 1,
+		None = 0,				 // We added this value to the C# version, because ughz... That's why...
+		AnotherDescription = 1,         // //ATTR_DESCRIPTION = 1,
 		ExtensionFile = 2,       // //ATTR_EXT_FILE = 2,
 		TileFlags = 3,           // ATTR_TILE_FLAGS = 3,
 		ActionId = 4,            // ATTR_ACTION_ID = 4,
 		UniqueId = 5,            // ATTR_UNIQUE_ID = 5,
 		Text = 6,                // ATTR_TEXT = 6,
-		AnotherDescription,      // ATTR_DESC = 7,
+		Description,      // ATTR_DESC = 7,
 		TeleportDestination,     // ATTR_TELE_DEST = 8,
 		Item,                    // ATTR_ITEM = 9,
 		DepotId,                 // ATTR_DEPOT_ID = 10,
@@ -24,7 +25,7 @@ namespace COMMO.Server.World {
 		DecayingState,           // ATTR_DECAYING_STATE = 17,
 		WrittenDate,             // ATTR_WRITTENDATE = 18,
 		WrittenBy,               // ATTR_WRITTENBY = 19,
-		SleeperGuid,             // ATTR_SLEEPERGUID = 20,
+		SleeperGUID,             // ATTR_SLEEPERGUID = 20,
 		SleepStart,              // ATTR_SLEEPSTART = 21,
 		Charges,                 // ATTR_CHARGES = 22,
 		ContainerItems,          // ATTR_CONTAINER_ITEMS = 23,
