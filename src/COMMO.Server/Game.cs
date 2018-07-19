@@ -26,6 +26,7 @@ using COMMO.Server.World.PathFinding;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -74,7 +75,10 @@ namespace COMMO.Server {
 			Creatures = new ConcurrentDictionary<uint, Creature>();
 
 			// Initialize the map
-			_map = new Map.Map(new SectorMapLoader(ServerConfiguration.LiveMapDirectory));
+			// _map = new Map.Map(new SectorMapLoader(ServerConfiguration.LiveMapDirectory));
+			var otbmWorldData = File.ReadAllBytes(@"C:\Source\forgottenserver-master\data\world\forgotten.otbm");
+			var pseudoWorldLoader = World.OTBMWorldLoader.LoadWorld(otbmWorldData);
+			_map = new Map.Map(pseudoWorldLoader);
 
 			// Initialize game vars.
 			Status = WorldState.Creating;
