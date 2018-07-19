@@ -225,10 +225,54 @@ namespace COMMO.Server.World {
 
 			var stream = new OTBParsingStream(itemNode.Data);
 
-			var itemId = stream.ReadUInt16();
-			switch (itemId) {
+			var originalItemId = stream.ReadUInt16();
+			var newItemId = originalItemId;
 
+			switch (originalItemId) {
+				case (UInt16)OTBMWorldItemId.FireFieldPvpLarge:
+				newItemId = (UInt16)OTBMWorldItemId.FireFieldPersistentLarge;
+				break;
+
+				case (UInt16)OTBMWorldItemId.FireFieldPvpMedium:
+				newItemId = (UInt16)OTBMWorldItemId.FireFieldPersistentMedium;
+				break;
+
+				case (UInt16)OTBMWorldItemId.FireFieldPvpSmall:
+				newItemId = (UInt16)OTBMWorldItemId.FireFieldPersistentSmall;
+				break;
+
+				case (UInt16)OTBMWorldItemId.EnergyFieldPvp:
+				newItemId = (UInt16)OTBMWorldItemId.EnergyFieldPersistent;
+				break;
+
+				case (UInt16)OTBMWorldItemId.PoisonFieldPvp:
+				newItemId = (UInt16)OTBMWorldItemId.PoisonFieldPersistent;
+				break;
+
+				case (UInt16)OTBMWorldItemId.MagicWall:
+				newItemId = (UInt16)OTBMWorldItemId.MagicWallPersistent;
+				break;
+
+				case (UInt16)OTBMWorldItemId.WildGrowth:
+				newItemId = (UInt16)OTBMWorldItemId.WildGrowthPersistent;
+				break;
+
+				default:
+				break;
 			}
+
+			if (newItemId != originalItemId) {
+				// Log a warning
+			}
+
+			var item = ItemFactory.Create(newItemId);
+			if (item == null) {
+				// Since the method above may returna null
+				// Log a warning
+			}
+
+			var attributeType = (OTBMWorldItemAttribute)stream.ReadByte();
+			throw new NotImplementedException();
 		}
 
 		private static TileFlags UpdateTileFlags(TileFlags oldFlags, OTBMTileFlags newFlags) {

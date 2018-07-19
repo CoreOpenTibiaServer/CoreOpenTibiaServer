@@ -2,7 +2,7 @@ namespace COMMO.Server.World {
 	using System;
 
 	/// <summary>
-	/// This is a port of the enum "ItemType" definied in const.h, line 435
+	/// This is a port TFS's enum "ItemType" definied in const.h, line 435
 	/// Used to parse OTBM worlds.
 	/// </summary>
 	public enum OTBMWorldItemId : UInt16 {
