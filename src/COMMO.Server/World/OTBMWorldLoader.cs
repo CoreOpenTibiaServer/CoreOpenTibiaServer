@@ -1,8 +1,7 @@
 namespace COMMO.Server.World {
 	using COMMO.OTB;
 	using COMMO.Server.Items;
-	using COMMO.Server.Map;
-	using COMMO.Utilities;
+	using NLog;
 	using System;
 	using System.Collections.Generic;
 	using Tile = COMMO.Server.Map.Tile;
@@ -11,6 +10,12 @@ namespace COMMO.Server.World {
 	/// This class contains the methods necessary to load a .otbm file.
 	/// </summary>
 	public static partial class OTBMWorldLoader {
+
+		/// <summary>
+		/// NLog's documentation suggests that we should store a reference to the logger,
+		/// instead of asking the LogManager for a new instance everytime we need to log something.
+		/// </summary>
+		private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
 		/// <summary>
 		/// This class only support items encoded using this major version.
@@ -64,12 +69,11 @@ namespace COMMO.Server.World {
 			if (itemEncodingMinorVersion < SupportedItemEncodingMinorVersion)
 				throw new InvalidOperationException();
 
-			// TODO: use decent loggin methods
-			Console.WriteLine($"OTBM header version: {headerVersion}");
-			Console.WriteLine($"World width: {worldWidth}");
-			Console.WriteLine($"World height: {worldHeight}");
-			Console.WriteLine($"Item encoding major version: {itemEncodingMajorVersion}");
-			Console.WriteLine($"Item encoding minor version: {itemEncodingMinorVersion}");
+			_logger.Info($"OTBM header version: {headerVersion}.");
+			_logger.Info($"World width: {worldWidth}.");
+			_logger.Info($"World height: {worldHeight}.");
+			_logger.Info($"Item encoding major version: {itemEncodingMajorVersion}.");
+			_logger.Info($"Item encoding minor version: {itemEncodingMinorVersion}.");
 		}
 
 		/// <summary>
@@ -261,15 +265,14 @@ namespace COMMO.Server.World {
 				break;
 			}
 
-			if (newItemId != originalItemId) {
-				// Log a warning
-			}
+			if (newItemId != originalItemId)
+				_logger.Warn($"Converted {(OTBMWorldItemId)originalItemId} to {(OTBMWorldItemId)newItemId}.");
+
 
 			var item = ItemFactory.Create(newItemId);
-			if (item == null) {
-				// Since the method above may returna null
-				// Log a warning
-			}
+			if (item == null) 
+				_logger.Warn($"{nameof(ItemFactory)} was unable to create a item with id: {newItemId}.");
+			
 
 			var attributeType = (OTBMWorldItemAttribute)stream.ReadByte();
 			throw new NotImplementedException();
