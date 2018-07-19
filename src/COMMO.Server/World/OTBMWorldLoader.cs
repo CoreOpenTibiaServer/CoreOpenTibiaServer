@@ -4,6 +4,7 @@ namespace COMMO.Server.World {
 	using NLog;
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using Tile = COMMO.Server.Map.Tile;
 
 	/// <summary>
@@ -182,7 +183,6 @@ namespace COMMO.Server.World {
 			var tileFlags = TileFlags.None;
 			var tilesItems = new List<Item>();
 
-
 			var tileNodeAttribute = (OTBMWorldNodeAttribute)stream.ReadByte();
 			switch (tileNodeAttribute) {
 
@@ -192,40 +192,21 @@ namespace COMMO.Server.World {
 				break;
 
 				case OTBMWorldNodeAttribute.Item:
-				ParseTilesItemNode(tileNode);
-
-
-				//if (isHouseTile && item->isMoveable()) {
-				//	std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID() << ", in house: " << house->getId() << ", at position [x: " << x << ", y: " << y << ", z: " << z << "]." << std::endl;
-				//	delete item;
-				//} else {
-				//	if (item->getItemCount() <= 0) {
-				//		item->setItemCount(1);
-				//	}
-
-				//	if (tile) {
-				//		tile->internalAddThing(item);
-				//		item->startDecaying();
-				//		item->setLoadedFromMap(true);
-				//	} else if (item->isGroundTile()) {
-				//		delete ground_item;
-				//		ground_item = item;
-				//	} else {
-				//		tile = createTile(ground_item, item, x, y, z);
-				//		tile->internalAddThing(item);
-				//		item->startDecaying();
-				//		item->setLoadedFromMap(true);
-				//	}
-				//}
-
+				var item = ParseTilesItemNode(tileNode);
+#warning Not sure if this is the proper method
+				tile.AddContent(item);
 				break;
 
 				default:
 				throw new Exception("TFS just threw a exception here, so shall we... Reason: unknown tile attribute.");
 			}
 
-			foreach (var itemNode in tileNode.Children)
-				ParseTilesItemNode(itemNode);
+			var items = tileNode.Children.Select(node => ParseTilesItemNode(node));
+
+			foreach (var i in items) {
+#warning Not sure if this is the proper method
+				tile.AddContent(i);
+			}
 
 			world.AddTile(tile);
 		}
@@ -251,16 +232,55 @@ namespace COMMO.Server.World {
 		/// Updates the <paramref name="world"/> with the data contained
 		/// in <paramref name="tileNode"/>.
 		/// </summary>
-		private static void ParseTownCollectionNode(OTBNode child, World world) {
-			throw new NotImplementedException();
+		private static void ParseTownCollectionNode(OTBNode townCollectionNode, World world) {
+			if (townCollectionNode == null)
+				throw new ArgumentNullException(nameof(townCollectionNode));
+			if (world == null)
+				throw new ArgumentNullException(nameof(world));
+
+			foreach (var townNode in townCollectionNode.Children) {
+				if (townNode.Type != OTBNodeType.Town)
+					throw new InvalidOperationException();
+
+				var stream = new OTBParsingStream(townNode.Data);
+
+				var townId = stream.ReadUInt32();
+				// Implement Town and TownManager
+
+				var townName = stream.ReadString();
+				// Set town name
+
+				var townTempleX = stream.ReadUInt16();
+				var townTempleY = stream.ReadUInt16();
+				var townTempleZ = stream.ReadBool();
+				// Set town's temple
+			}
 		}
 
 		/// <summary>
 		/// Updates the <paramref name="world"/> with the data contained
 		/// in <paramref name="tileNode"/>.
 		/// </summary>
-		private static void ParseWaypointCollectionNode(OTBNode child, World world) {
-			throw new NotImplementedException();
+		private static void ParseWaypointCollectionNode(OTBNode waypointCollection, World world) {
+			if (waypointCollection == null)
+				throw new ArgumentNullException(nameof(waypointCollection));
+			if (world == null)
+				throw new ArgumentNullException(nameof(world));
+
+			foreach (var waypointNode in waypointCollection.Children) {
+				if (waypointNode.Type != OTBNodeType.WayPoint)
+					throw new InvalidOperationException();
+
+				var stream = new OTBParsingStream(waypointNode.Data);
+
+				var waypointName = stream.ReadString();
+
+				var waypointX = stream.ReadUInt16();
+				var waypointY = stream.ReadUInt16();
+				var waypointZ = stream.ReadBool();
+
+				// Implement waypoints
+			}
 		}
 	}
 }
