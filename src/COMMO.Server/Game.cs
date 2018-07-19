@@ -258,13 +258,13 @@ namespace COMMO.Server {
 			Status = WorldState.Open;
 		}
 
-		public bool ScheduleEvent(IEvent newEvent, TimeSpan delay = default(TimeSpan)) {
+		public bool ScheduleEvent(IEvent newEvent, TimeSpan delay = default) {
 			if (newEvent == null)
 				throw new ArgumentNullException(nameof(newEvent));
 
 			// pre check if can be executed only if not explicitly set to executeTime
 			if (newEvent.EvaluateAt == EvaluationTime.OnExecute || newEvent.CanBeExecuted) {
-				var noDelay = delay == default(TimeSpan) || delay < TimeSpan.Zero;
+				var noDelay = delay == default || delay < TimeSpan.Zero;
 
 				if (noDelay) {
 					_scheduler.ImmediateEvent(newEvent);
@@ -819,7 +819,7 @@ namespace COMMO.Server {
 			return totalBytes.ToArray();
 		}
 
-		internal bool RequestCreatureWalkToDirection(ICreature creature, Direction direction, TimeSpan delay = default(TimeSpan)) {
+		internal bool RequestCreatureWalkToDirection(ICreature creature, Direction direction, TimeSpan delay = default) {
 			var fromLoc = creature.Location;
 			var toLoc = fromLoc;
 
