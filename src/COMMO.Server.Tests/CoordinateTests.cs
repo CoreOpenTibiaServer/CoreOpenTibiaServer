@@ -67,7 +67,6 @@ namespace COMMO.Server.Tests {
 			Assert.AreEqual(
 				expected: expectedZ,
 				actual: translatedCoord.Z);
-
 		}
 	}
 }

@@ -69,7 +69,7 @@ namespace COMMO.Server.World {
 			var itemEncodingMinorVersion = parsingStream.ReadUInt32();
 			if (itemEncodingMinorVersion < SupportedItemEncodingMinorVersion)
 				throw new InvalidOperationException();
-
+      
 			_logger.Info($"OTBM header version: {headerVersion}.");
 			_logger.Info($"World width: {worldWidth}.");
 			_logger.Info($"World height: {worldHeight}.");
@@ -227,7 +227,8 @@ namespace COMMO.Server.World {
 
 			return oldFlags;
 		}
-
+    
+    
 		/// <summary>
 		/// Updates the <paramref name="world"/> with the data contained
 		/// in <paramref name="tileNode"/>.
@@ -256,7 +257,7 @@ namespace COMMO.Server.World {
 				// Set town's temple
 			}
 		}
-
+    
 		/// <summary>
 		/// Updates the <paramref name="world"/> with the data contained
 		/// in <paramref name="tileNode"/>.
