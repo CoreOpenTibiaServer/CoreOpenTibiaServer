@@ -1,13 +1,15 @@
 namespace COMMO.Server.Tests {
 	using COMMO.Server.World;
-	using System.Collections.Generic;
-	using Xunit;
+	using NUnit.Framework;
 
+	[TestFixture]
 	public sealed class CoordinateTests {
 
-		[Theory]
-		[MemberData(nameof(CombinationsOfTwoOffsets))]
-		public void Translate_WithTwoOffsets(int xOffset, int yOffset) {
+		[Test, Combinatorial]
+		public void Translate_WithTwoOffsets(
+			[Values(-1, 0, 1)] int xOffset,
+			[Values(-1, 0, 1)] int yOffset
+			) {
 			var startCoord = new Coordinate(
 				x: 0,
 				y: 0,
@@ -21,33 +23,25 @@ namespace COMMO.Server.Tests {
 			var expectedY = startCoord.Y + yOffset;
 			var expectedZ = startCoord.Z;
 
-			Assert.Equal(
+			Assert.AreEqual(
 				expected: expectedX,
 				actual: translatedCoord.X);
 
-			Assert.Equal(
+			Assert.AreEqual(
 				expected: expectedY,
 				actual: translatedCoord.Y);
 
-			Assert.Equal(
+			Assert.AreEqual(
 				expected: expectedZ,
 				actual: translatedCoord.Z);
-
 		}
 
-		public static IEnumerable<object[]> CombinationsOfTwoOffsets {
-			get {
-				for (int x = -1; x <= 1; x++) {
-					for (int y = -1; y <= 1; y++) {
-						yield return new object[] { x, y };
-					}
-				}
-			}
-		}
-
-		[Theory]
-		[MemberData(nameof(CombinationsOfThreeOffsets))]
-		public void Translate_WithThreeOffsets(int xOffset, int yOffset, sbyte zOffset) {
+		[Test, Combinatorial]
+		public void Translate_WithThreeOffsets(
+			[Values(-1, 0, 1)] int xOffset,
+			[Values(-1, 0, 1)] int yOffset,
+			[Values(-1, 0, 1)] sbyte zOffset
+			) {
 			var startCoord = new Coordinate(
 				x: 0,
 				y: 0,
@@ -62,30 +56,18 @@ namespace COMMO.Server.Tests {
 			var expectedY = startCoord.Y + yOffset;
 			var expectedZ = startCoord.Z + zOffset;
 
-			Assert.Equal(
+			Assert.AreEqual(
 				expected: expectedX,
 				actual: translatedCoord.X);
 
-			Assert.Equal(
+			Assert.AreEqual(
 				expected: expectedY,
 				actual: translatedCoord.Y);
 
-			Assert.Equal(
+			Assert.AreEqual(
 				expected: expectedZ,
 				actual: translatedCoord.Z);
 
-		}
-
-		public static IEnumerable<object[]> CombinationsOfThreeOffsets {
-			get {
-				for (int x = -1; x <= 1; x++) {
-					for (int y = -1; y <= 1; y++) {
-						for (sbyte z = -1; z <= 1; z++) {
-							yield return new object[] { x, y, z };
-						}
-					}
-				}
-			}
 		}
 	}
 }
