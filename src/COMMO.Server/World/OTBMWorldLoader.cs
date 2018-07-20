@@ -192,7 +192,7 @@ namespace COMMO.Server.World {
 				break;
 
 				case OTBMWorldNodeAttribute.Item:
-				var item = ParseTilesItemNode(tileNode);
+				var item = ParseItemData(stream);
 #warning Not sure if this is the proper method
 				tile.AddContent(item);
 				break;
@@ -201,7 +201,11 @@ namespace COMMO.Server.World {
 				throw new Exception("TFS just threw a exception here, so shall we... Reason: unknown tile attribute.");
 			}
 
-			var items = tileNode.Children.Select(node => ParseTilesItemNode(node));
+			// var items = tileNode.Children.Select(node => ParseTilesItemNode(node));
+			var items = tileNode
+				.Children
+				.Select(node => new OTBParsingStream(node.Data))
+				.Select(nodeStream => ParseItemData(nodeStream));
 
 			foreach (var i in items) {
 #warning Not sure if this is the proper method
