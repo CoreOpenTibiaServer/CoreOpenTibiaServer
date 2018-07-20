@@ -17,7 +17,6 @@ using COMMO.Server.Data.Interfaces;
 using COMMO.Server.Data.Models.Structs;
 using COMMO.Server.Events;
 using COMMO.Server.Items;
-using COMMO.Server.Map;
 using COMMO.Server.Monsters;
 using COMMO.Server.Movement;
 using COMMO.Server.Notifications;
@@ -77,7 +76,8 @@ namespace COMMO.Server {
 			// Initialize the map
 			// _map = new Map.Map(new SectorMapLoader(ServerConfiguration.LiveMapDirectory));
 			var otbmWorldData = File.ReadAllBytes(@"C:\Source\forgottenserver-master\data\world\forgotten.otbm");
-			var pseudoWorldLoader = World.OTBMWorldLoader.LoadWorld(otbmWorldData);
+			var relevantData = new Memory<byte>(otbmWorldData).Slice(4, otbmWorldData.Length - 4);
+			var pseudoWorldLoader = World.OTBMWorldLoader.LoadWorld(relevantData);
 			_map = new Map.Map(pseudoWorldLoader);
 
 			// Initialize game vars.
