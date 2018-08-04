@@ -32,10 +32,13 @@ namespace COMMO.Server.World {
 		/// Loads a .otbm file, parse it's contents and returns a <see cref="COMMO.Server.World.World"/>.
 		/// </summary>
 		public static World LoadWorld(ReadOnlyMemory<byte> serializedWorldData) {
-
 			var world = new World();
 
-			var rootNode = OTBDeserializer.DeserializeOTBData(serializedWorldData);
+			var otbmFormatSpecifierLength = 4;
+			var rootNode = OTBDeserializer.DeserializeOTBData(
+				serializedOTBData: serializedWorldData,
+				skipFirstBytes: otbmFormatSpecifierLength);
+
 			ParseOTBTreeRootNode(rootNode);
 
 			var worldDataNode = rootNode.Children[0];
