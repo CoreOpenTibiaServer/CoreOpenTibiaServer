@@ -7,6 +7,8 @@ namespace COMMO.OTB {
 	/// back to a OTB tree.
 	/// </summary>
 	public static class OTBDeserializer {
+		public static readonly int IdentifierLength = 4;
+
 		/// <summary>
 		/// Parses data serialized as .otb and returns the deserialized .otb tree structure.
 		/// </summary>

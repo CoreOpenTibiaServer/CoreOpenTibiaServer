@@ -13,7 +13,26 @@ namespace COMMO.Server.Items {
         public static object InitLock = new object();
 
         public static Dictionary<ushort, ItemType> ItemsCatalog { get; private set; }
-		
+
+        public static void Initialize(bool UseOTItemFiles = false)
+        {
+            if (ItemsCatalog != null)
+            {
+                return;
+            }
+
+            lock (InitLock)
+            {
+                if (ItemsCatalog == null)
+                {
+                    if (UseOTItemFiles)
+                        ItemsCatalog = Game.Instance.ItemLoader.LoadOTItems();
+                    else
+                        ItemsCatalog = Game.Instance.ItemLoader.Load(ServerConfiguration.ObjectsFileName);
+                }
+            }
+        }
+    
         public static Item Create(ushort typeId)
         {
             if (ItemsCatalog == null)
